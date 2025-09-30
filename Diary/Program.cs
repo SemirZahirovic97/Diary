@@ -27,6 +27,20 @@
 
                 string choice = Console.ReadLine();
 
-            }
+                switch (choice)
+                {
+                    case "1": AddEntry(); break;
+                    case "2": ListEntries(); break;
+                    case "3": SearchByDate(); break;
+                    case "4": EditEntry(); break;
+                    case "5": DeleteEntry(); break;
+                    case "6": SaveToFile(); break;
+                    case "7": LoadFromFile(); break;
+                    case "0": return;
+                    default: Console.WriteLine("Ogiltigt val. Tryck på valfri tangent för att fortsätta...");
+                    Console.ReadKey(); 
+                    break;
+
+                }
     }
 }
