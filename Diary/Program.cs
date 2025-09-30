@@ -37,7 +37,14 @@ namespace Diary
                     case "4": EditEntry(); break;
                     case "5": DeleteEntry(); break;
                     case "6": SaveToFile(); break;
-                    case "7": LoadFromFile(); break;
+                    case "7":
+                        Console.WriteLine("Fil sökväg: " + Path.GetFullPath(FilePath));
+                        int loaded = LoadFromFile();
+                        if (File.Exists(FilePath))
+                            Console.WriteLine($"Läst in {loaded} anteckning(ar) från fil.");
+                        else
+                            Console.WriteLine("Ingen fil hittades.");
+                        break;
                     case "0": return;
                     default:
                         Console.WriteLine("Ogiltigt val. Tryck på valfri tangent för att fortsätta...");
