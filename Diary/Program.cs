@@ -37,10 +37,89 @@
                     case "6": SaveToFile(); break;
                     case "7": LoadFromFile(); break;
                     case "0": return;
-                    default: Console.WriteLine("Ogiltigt val. Tryck på valfri tangent för att fortsätta...");
-                    Console.ReadKey(); 
-                    break;
+                    default:
+                        Console.WriteLine("Ogiltigt val. Tryck på valfri tangent för att fortsätta...");
+                        Console.ReadKey();
+                        break;
 
                 }
+            }
+        }
+
+        private static void AddEntry()
+        {
+            Console.Clear();
+            Console.WriteLine("--- Ny anteckning ---");
+            Console.WriteLine("Skriv din anteckning:");
+            string text = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                Console.WriteLine("Tom text är inte tillåten.");
+                
+                return;
+            }
+
+            var entry = new DiaryEntry { Date = DateTime.Now, Text = text.Trim() };
+
+            entries.Add(entry);
+            entriesByDateTime[entry.Date] = entry;
+
+            Console.WriteLine("Anteckning sparad.");
+            
+        }
+
+        private static void ListEntries()
+        {
+            Console.Clear();
+            Console.WriteLine("--- Alla anteckningar ---");
+
+            if (!entries.Any())
+            {
+                Console.WriteLine("Inga anteckningar sparade.");
+            }
+            else
+            {
+                var sorted = entries.OrderBy(e => e.Date).ToList();
+                foreach (var e in sorted)
+                {
+                    Console.WriteLine($"{e.Date:yyyy-MM-dd HH:mm}: {e.Text}");
+                    Console.WriteLine(new string('-', 40));
+                }
+            }
+            
+        }
+
+        private static void SearchByDate()
+        {
+            Console.Clear();
+            Console.WriteLine("--- Sök anteckning på datum ---");
+            Console.Write("Ange datum (yyyy-mm-dd): ");
+            string input = Console.ReadLine();
+
+            if (!DateTime.TryParse(input, out DateTime date))
+            {
+                Console.WriteLine("Ogiltigt datum!");
+                
+                return;
+            }
+
+            var found = entries.Where(e => e.Date.Date == date.Date).OrderBy(e => e.Date).ToList();
+
+            if (!found.Any())
+            {
+                Console.WriteLine("Ingen anteckning hittades.");
+            }
+            else
+            {
+                foreach (var e in found)
+                {
+                    Console.WriteLine($"{e.Date:yyyy-MM-dd HH:mm}: {e.Text}");
+                    Console.WriteLine(new string('-', 40));
+                }
+            }
+
+            
+        }
     }
 }
