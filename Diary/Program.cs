@@ -1,4 +1,6 @@
-﻿namespace Diary
+﻿using System.Text.Json;
+
+namespace Diary
 {
     class Program
     {
@@ -217,6 +219,53 @@
             }
 
             
+        }
+
+        private static void SaveToFile()
+        {
+            try
+            {
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string json = JsonSerializer.Serialize(entries, options);
+                File.WriteAllText(FilePath, json);
+                Console.WriteLine($"Sparat {entries.Count} anteckning(ar).");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Fel vid sparande: " + ex.Message);
+            }
+            
+        }
+
+        private static int LoadFromFile()
+        {
+            if (!File.Exists(FilePath))
+                return 0;
+
+            try
+            {
+                string json = File.ReadAllText(FilePath);
+                var loaded = JsonSerializer.Deserialize<List<DiaryEntry>>(json);
+
+                entries.Clear();
+                entriesByDateTime.Clear();
+
+                if (loaded != null)
+                {
+                    foreach (var e in loaded)
+                    {
+                        entries.Add(e);
+                        entriesByDateTime[e.Date] = e;
+                    }
+                }
+                return entries.Count;
+            }
+            catch
+            {
+                Console.WriteLine("Fel vid inläsning av fil.");
+                
+                return 0;
+            }
         }
     }
 }
