@@ -4,16 +4,24 @@ namespace Diary
 {
     class Program
     {
+        // Diary entry class
+
         private static List<DiaryEntry> entries = new List<DiaryEntry>();
         private static Dictionary<DateTime, DiaryEntry> entriesByDateTime = new Dictionary<DateTime, DiaryEntry>();
 
         private const string FilePath = "Diary.json";
         static void Main(string[] args)
+
+           
+        
         {
+            // Attempt to load existing entries from file at startup
 
             LoadFromFile();
 
-            while (true)
+            // Main loop
+
+            while (true) 
             {
                 Console.Clear();
                 Console.WriteLine("=== Dagboksapp ===");
@@ -29,6 +37,8 @@ namespace Diary
 
                 string choice = Console.ReadLine();
 
+                // Handle user choice
+
                 switch (choice)
                 {
                     case "1": AddEntry(); break;
@@ -38,7 +48,7 @@ namespace Diary
                     case "5": DeleteEntry(); break;
                     case "6": SaveToFile(); break;
                     case "7":
-                        Console.WriteLine("Fil sökväg: " + Path.GetFullPath(FilePath));
+                        Console.WriteLine("Fil sökväg: " + Path.GetFullPath(FilePath)); // Was stuck with error, took help of copilot
                         int loaded = LoadFromFile();
                         if (File.Exists(FilePath))
                             Console.WriteLine($"Läst in {loaded} anteckning(ar) från fil.");
@@ -56,6 +66,8 @@ namespace Diary
                 }
             }
         }
+
+        // Methods for each menu option
 
         private static void AddEntry()
         {
@@ -80,6 +92,8 @@ namespace Diary
             Pause();
         }
 
+        // List all entries
+
         private static void ListEntries()
         {
             Console.Clear();
@@ -94,12 +108,14 @@ namespace Diary
                 var sorted = entries.OrderBy(e => e.Date).ToList();
                 foreach (var e in sorted)
                 {
-                    Console.WriteLine($"{e.Date:yyyy-MM-dd HH:mm}: {e.Text}");
+                    Console.WriteLine($"{e.Date:yyyy-MM-dd HH:mm} : {e.Text}");
                     Console.WriteLine(new string('-', 40));
                 }
             }
             Pause();
         }
+
+        // Search entries by date
 
         private static void SearchByDate()
         {
@@ -125,13 +141,15 @@ namespace Diary
             {
                 foreach (var e in found)
                 {
-                    Console.WriteLine($"{e.Date:yyyy-MM-dd HH:mm}: {e.Text}");
+                    Console.WriteLine($"{e.Date:yyyy-MM-dd HH:mm} : {e.Text}");
                     Console.WriteLine(new string('-', 40));
                 }
             }
             Pause();
 
         }
+
+        // Edit an existing entry
 
         private static void EditEntry()
         {
@@ -158,7 +176,7 @@ namespace Diary
 
             for (int i = 0; i < found.Count; i++)
             {
-                Console.WriteLine($"{i + 1}) {found[i].Date:HH:mm}: {found[i].Text}");
+                Console.WriteLine($"{i + 1}) {found[i].Date:HH:mm} : {found[i].Text}");
             }
 
             Console.Write("Ange nummer för vilken anteckning du vill redigera: ");
@@ -186,6 +204,8 @@ namespace Diary
             Pause();
         }
 
+        // Delete an entry
+
         private static void DeleteEntry()
         {
             Console.Clear();
@@ -211,7 +231,7 @@ namespace Diary
 
             for (int i = 0; i < found.Count; i++)
             {
-                Console.WriteLine($"{i + 1}) {found[i].Date:HH:mm}: {found[i].Text}");
+                Console.WriteLine($"{i + 1}) {found[i].Date:HH:mm} : {found[i].Text}");
             }
 
             Console.Write("Ange nummer för anteckningen du vill ta bort: ");
@@ -230,6 +250,8 @@ namespace Diary
 
         }
 
+        // Save entries to file
+
         private static void SaveToFile()
         {
             try
@@ -246,7 +268,9 @@ namespace Diary
             Pause();
         }
 
-        private static int LoadFromFile()
+        // Load entries from file
+
+        private static int LoadFromFile()  // Had trouble with this method, added return int and some code with help of copilot
         {
             if (!File.Exists(FilePath))
                 return 0;
@@ -277,10 +301,13 @@ namespace Diary
             }
         }
 
+        // Utility method to pause and wait for user input
+
         private static void Pause()
         {
             Console.WriteLine();
             Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
             Console.ReadKey();
         }
+    }
 }
