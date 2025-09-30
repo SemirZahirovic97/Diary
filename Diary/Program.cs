@@ -11,7 +11,7 @@ namespace Diary
         static void Main(string[] args)
         {
 
-
+            LoadFromFile();
 
             while (true)
             {
@@ -44,11 +44,13 @@ namespace Diary
                             Console.WriteLine($"Läst in {loaded} anteckning(ar) från fil.");
                         else
                             Console.WriteLine("Ingen fil hittades.");
+                        Pause();
                         break;
                     case "0": return;
                     default:
                         Console.WriteLine("Ogiltigt val. Tryck på valfri tangent för att fortsätta...");
                         Console.ReadKey();
+                        Pause();
                         break;
 
                 }
@@ -65,7 +67,7 @@ namespace Diary
             if (string.IsNullOrWhiteSpace(text))
             {
                 Console.WriteLine("Tom text är inte tillåten.");
-                
+                Pause();
                 return;
             }
 
@@ -75,7 +77,7 @@ namespace Diary
             entriesByDateTime[entry.Date] = entry;
 
             Console.WriteLine("Anteckning sparad.");
-            
+            Pause();
         }
 
         private static void ListEntries()
@@ -96,7 +98,7 @@ namespace Diary
                     Console.WriteLine(new string('-', 40));
                 }
             }
-            
+            Pause();
         }
 
         private static void SearchByDate()
@@ -109,7 +111,7 @@ namespace Diary
             if (!DateTime.TryParse(input, out DateTime date))
             {
                 Console.WriteLine("Ogiltigt datum!");
-                
+                Pause();
                 return;
             }
 
@@ -127,8 +129,8 @@ namespace Diary
                     Console.WriteLine(new string('-', 40));
                 }
             }
+            Pause();
 
-            
         }
 
         private static void EditEntry()
@@ -141,7 +143,7 @@ namespace Diary
             if (!DateTime.TryParse(input, out DateTime date))
             {
                 Console.WriteLine("Ogiltigt datum!");
-                
+                Pause();
                 return;
             }
 
@@ -150,7 +152,7 @@ namespace Diary
             if (!found.Any())
             {
                 Console.WriteLine("Ingen anteckning hittades.");
-                
+                Pause();
                 return;
             }
 
@@ -181,7 +183,7 @@ namespace Diary
                 Console.WriteLine("Ogiltigt val.");
             }
 
-            
+            Pause();
         }
 
         private static void DeleteEntry()
@@ -194,7 +196,7 @@ namespace Diary
             if (!DateTime.TryParse(input, out DateTime date))
             {
                 Console.WriteLine("Ogiltigt datum!");
-                
+                Pause();
                 return;
             }
 
@@ -203,7 +205,7 @@ namespace Diary
             if (!found.Any())
             {
                 Console.WriteLine("Ingen anteckning hittades.");
-                
+                Pause();
                 return;
             }
 
@@ -224,8 +226,8 @@ namespace Diary
             {
                 Console.WriteLine("Ogiltigt val.");
             }
+            Pause();
 
-            
         }
 
         private static void SaveToFile()
@@ -241,7 +243,7 @@ namespace Diary
             {
                 Console.WriteLine("Fel vid sparande: " + ex.Message);
             }
-            
+            Pause();
         }
 
         private static int LoadFromFile()
@@ -270,9 +272,15 @@ namespace Diary
             catch
             {
                 Console.WriteLine("Fel vid inläsning av fil.");
-                
+                Pause();
                 return 0;
             }
         }
-    }
+
+        private static void Pause()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Tryck på valfri tangent för att fortsätta...");
+            Console.ReadKey();
+        }
 }
