@@ -121,5 +121,102 @@
 
             
         }
+
+        private static void EditEntry()
+        {
+            Console.Clear();
+            Console.WriteLine("--- Redigera anteckning ---");
+            Console.Write("Ange datum (yyyy-mm-dd): ");
+            string input = Console.ReadLine();
+
+            if (!DateTime.TryParse(input, out DateTime date))
+            {
+                Console.WriteLine("Ogiltigt datum!");
+                
+                return;
+            }
+
+            var found = entries.Where(e => e.Date.Date == date.Date).OrderBy(e => e.Date).ToList();
+
+            if (!found.Any())
+            {
+                Console.WriteLine("Ingen anteckning hittades.");
+                
+                return;
+            }
+
+            for (int i = 0; i < found.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}) {found[i].Date:HH:mm}: {found[i].Text}");
+            }
+
+            Console.Write("Ange nummer för vilken anteckning du vill redigera: ");
+            if (int.TryParse(Console.ReadLine(), out int choice) && choice >= 1 && choice <= found.Count)
+            {
+                var entry = found[choice - 1];
+                Console.WriteLine("Ny text:");
+                string newText = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(newText))
+                {
+                    entry.Text = newText.Trim();
+                    entriesByDateTime[entry.Date] = entry;
+                    Console.WriteLine("Anteckningen uppdaterad.");
+                }
+                else
+                {
+                    Console.WriteLine("Tom text är inte tillåten.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt val.");
+            }
+
+            
+        }
+
+        private static void DeleteEntry()
+        {
+            Console.Clear();
+            Console.WriteLine("--- Ta bort anteckning ---");
+            Console.Write("Ange datum (yyyy-mm-dd): ");
+            string input = Console.ReadLine();
+
+            if (!DateTime.TryParse(input, out DateTime date))
+            {
+                Console.WriteLine("Ogiltigt datum!");
+                
+                return;
+            }
+
+            var found = entries.Where(e => e.Date.Date == date.Date).OrderBy(e => e.Date).ToList();
+
+            if (!found.Any())
+            {
+                Console.WriteLine("Ingen anteckning hittades.");
+                
+                return;
+            }
+
+            for (int i = 0; i < found.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}) {found[i].Date:HH:mm}: {found[i].Text}");
+            }
+
+            Console.Write("Ange nummer för anteckningen du vill ta bort: ");
+            if (int.TryParse(Console.ReadLine(), out int choice) && choice >= 1 && choice <= found.Count)
+            {
+                var entry = found[choice - 1];
+                entries.Remove(entry);
+                entriesByDateTime.Remove(entry.Date);
+                Console.WriteLine("Anteckningen borttagen.");
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt val.");
+            }
+
+            
+        }
     }
 }
